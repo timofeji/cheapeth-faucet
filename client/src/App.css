@@ -38,6 +38,10 @@ button {
   cursor: pointer;
 }
 
+button:hover{
+  background-color: #df5858;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .logo {
     animation: MoveUpDown 1s linear infinite;
@@ -55,8 +59,4 @@ button {
   50% {
     bottom: 10px;
   }
-}
-
-form{
-display: inline-block;
 }

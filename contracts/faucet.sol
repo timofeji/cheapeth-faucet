@@ -1,8 +1,8 @@
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.7.5;
 
 contract faucet {
-	address public me;
+	address public deployer;
 
 	struct requester {
         address requesteraddress;
@@ -12,23 +12,29 @@ contract faucet {
     requester[] public requesters;
 
 	constructor() public payable {
-		me = msg.sender;
+		deployer = msg.sender;
 	}
 
 	event sent(uint _amountsent);
 	event received();
 
-	function receive()
+    // function testFunc(address payable adr) returns(address ret){
+    //     return adr;
+    // }
+
+	function fundFaucet()
 		public
 		payable
 	{
 		emit received();
 	}
 
-    function send(address payable _requester, uint _request)
+    function sendFunds(address payable _requester, uint _request)
         public
-        payable
+        // payable
     {
+        // require(msg.sender == deployer);
+
         uint amountsent = 0;
         _request = _request * 1e18;
         
