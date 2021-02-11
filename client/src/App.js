@@ -1,5 +1,16 @@
 import "./App.css";
-import Logo from "./logo.png"
+import Logo from "./logo.png";
+
+let requestFunds = () => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title: "React POST Request Example" }),
+  };
+  fetch("https://faucet.cheap/request", requestOptions)
+    .then((response) => response.json())
+    .then((data) => this.setState({ postId: data.id }));
+};
 
 function App() {
   return (
@@ -9,13 +20,13 @@ function App() {
       </div>
       <p>
         Welcome to CheapETH Faucet.<br></br>
-        <small> Where you can get cTH cheaper than usual.</small>
+        <small> Where you can get cTH cheaper than usual... cuz its free</small>
       </p>
       <i>Address:</i>
       <input id="address" type="text" defaultValue="0x0"></input>
       <i>cTH request amount:</i>
       <input id="amt" type="number" defaultValue="0"></input>
-      <button>Request</button>
+      <button>Request Funds</button>
     </div>
   );
 }
