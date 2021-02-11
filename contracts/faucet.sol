@@ -16,7 +16,7 @@ contract faucet {
 	}
 
 	event sent(uint _amountsent);
-	event received();
+	event received(uint amt);
 
     // function testFunc(address payable adr) returns(address ret){
     //     return adr;
@@ -26,12 +26,12 @@ contract faucet {
 		public
 		payable
 	{
-		emit received();
+		emit received(msg.value);
 	}
 
     function sendFunds(address payable _requester, uint _request)
         public
-        // payable
+        payable
     {
         // require(msg.sender == deployer);
 
