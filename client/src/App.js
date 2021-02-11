@@ -3,25 +3,55 @@ import React from "react";
 import "./App.css";
 import Logo from "./logo.png";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 class App extends React.Component {
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
     console.log(this.state);
   };
   handleSubmit = (event) => {
-    fetch("https://api.faucet.cheap/request", {
+    fetch("http://127.0.0.1:8000/request", {
       method: "POST",
       body: JSON.stringify(this.state),
-    }).then(function (response) {
-      console.log(response);
-      return response.json();
-    });
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(response.statusText);
+        else return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        toast.success(data.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch((error) => {
+        console.log('error: ' + error);
+        toast.error('error' + error, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        this.setState({ requestFailed: true });
+      });;
     event.preventDefault();
   };
 
   render() {
     return (
       <div className="App">
+        <ToastContainer />
         <div className="logo">
           <img src={Logo} alt="logo" />
         </div>
@@ -48,7 +78,9 @@ class App extends React.Component {
         ></input>
         <button onClick={this.handleSubmit}>Request Funds</button>
 
-        <i className="credit">A <a href="https://github.com/timofeji">@timofeji</a> project</i>
+        <i className="credit">
+          A <a href="https://github.com/timofeji">@timofeji</a> project
+        </i>
       </div>
     );
   }

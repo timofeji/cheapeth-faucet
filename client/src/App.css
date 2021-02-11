@@ -38,6 +38,10 @@ button {
   cursor: pointer;
 }
 
+button:visited{
+  background-color: #300000;
+}
+
 .credit {
   position: fixed;
   bottom:15px;
