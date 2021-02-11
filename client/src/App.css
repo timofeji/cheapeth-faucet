@@ -38,6 +38,16 @@ button {
   cursor: pointer;
 }
 
+.credit {
+  position: fixed;
+  bottom:15px;
+}
+a {
+  color: #bc0000;
+}
+a:hover {
+  color: #df5858;
+}
 button:hover{
   background-color: #df5858;
 }

@@ -47,6 +47,8 @@ class App extends React.Component {
           onChange={this.handleChange}
         ></input>
         <button onClick={this.handleSubmit}>Request Funds</button>
+
+        <i className="credit">A <a href="https://github.com/timofeji">@timofeji</a> project</i>
       </div>
     );
   }
