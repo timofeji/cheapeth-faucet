@@ -21,9 +21,10 @@ tx_hash = faucet.functions.fundFaucet().transact(
     {'from': w3.eth.accounts[0], 'value': 10000000000000000000})
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
-rich_logs = faucet.events.received().processReceipt(tx_receipt)
-rich_logs[0]['args']
-print(rich_logs)
+event_log = faucet.events.received().processReceipt(tx_receipt)
+event_log[0]['args']
+
+print(event_log)
 
 class FaucetRequest(BaseModel):
     address: str
@@ -41,9 +42,11 @@ def root():
 @app.post("/request")
 def read_user(request: FaucetRequest):
     address = Web3.toChecksumAddress(request.address)
-    tx_hash = faucet.functions.sendFunds(address, 1000).transact()
+    amt = Web3.toWei(request.amt, 'ether')
+    print(amt)
+    tx_hash = faucet.functions.sendFunds(address, amt).transact()
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    rich_logs = faucet.events.sent().processReceipt(tx_receipt)
-    rich_logs[0]['args']
-    print(rich_logs)
+    event_logs = faucet.events.sent().processReceipt(tx_receipt)
+    event_logs[0]['args']
+    print(event_log)
     return {"message": "YOU GOT IT CHIEF"}

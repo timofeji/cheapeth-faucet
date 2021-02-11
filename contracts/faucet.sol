@@ -29,28 +29,18 @@ contract faucet {
 		emit received(msg.value);
 	}
 
-    function sendFunds(address payable _requester, uint _request)
+    function sendFunds(address payable _targetAddress, uint _amt)
         public
         payable
     {
-        // require(msg.sender == deployer);
+        require(msg.sender == deployer);
+        require(address(this).balance >= _amt);
 
-        uint amountsent = 0;
-        _request = _request * 1e18;
-        
-        if (address(this).balance > _request){
-            amountsent = _request/1e18;
-            _requester.transfer(_request);   
-        }
-        else{
-            amountsent = (address(this).balance)/1e18;
-            _requester.transfer(address(this).balance);
-        }
-        
+        _targetAddress.transfer(_amt);   
         requester memory r;
-        r.requesteraddress = _requester;
-        r.amount = amountsent;
+        r.requesteraddress = _targetAddress;
+        r.amount = _amt;
         requesters.push(r);
-        emit sent(amountsent);
+        emit sent(_amt);
     }
 }
