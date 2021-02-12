@@ -5,7 +5,7 @@ contract faucet {
 	address public deployer;
 
 	struct requester {
-        address requesteraddress;
+        address requestAddress;
         uint amount;
     }
     
@@ -38,7 +38,7 @@ contract faucet {
 
         _targetAddress.transfer(_amt);   
         requester memory r;
-        r.requesteraddress = _targetAddress;
+        r.requestAddress = _targetAddress;
         r.amount = _amt;
         requesters.push(r);
         emit sent(_amt);
