@@ -1,3 +1,5 @@
+@import url(//db.onlinewebfonts.com/c/2858f88cb71b6ac1122a944e220d9940?family=DK+Cool+Crayon);
+
 .App {
   text-align: center;
   background-color: #282c34;
@@ -8,7 +10,9 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-family: "DK Cool Crayon";
 }
+
 
 .logo {
   pointer-events: none;
