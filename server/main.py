@@ -6,11 +6,36 @@ from web3 import Web3, HTTPProvider
 from solcx import compile_files
 
 import time
+import os
+import atexit
+import json
+from json.decoder import JSONDecodeError
 
+
+#10 days
+COOLDOWN_PERIOD = 864000
+COOLDOWN_FILENAME = 'cooldowns.json'
+
+cooldowns = {}
+if(os.path.exists(COOLDOWN_FILENAME)):
+    with open(COOLDOWN_FILENAME) as f:
+        try:
+            cooldowns = json.load(f)
+        except JSONDecodeError:
+            pass
+
+
+def exit_handler():
+    js = json.dumps(cooldowns)
+    f = open(COOLDOWN_FILENAME, "w")
+    f.write(js)
+    f.close()
+
+atexit.register(exit_handler)
 
 #ganache boy
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:7545'))
-w3.eth.default_account = w3.eth.accounts[0]
+w3.eth.default_account = w3.eth.accounts[1]
 
 compiled_sol = compile_files(['../contracts/faucet.sol'])
 deployment_compiled = compiled_sol['../contracts/faucet.sol:faucet']
@@ -22,7 +47,7 @@ tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 faucet = w3.eth.contract(address=tx_receipt.contractAddress, abi=deployment_compiled['abi'])
 
 tx_hash = faucet.functions.fundFaucet().transact(
-    {'from': w3.eth.accounts[0], 'value': 1000000000000000000})
+    {'from': w3.eth.accounts[1], 'value': 1000000000000000000})
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
 event_log = faucet.events.received().processReceipt(tx_receipt)
@@ -50,10 +75,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#10 days
-cooldown_period = 864000
-cooldowns = {}
-
 
 
 @app.get("/")
@@ -64,8 +85,8 @@ def root():
 @app.post("/request")
 def read_user(request: FaucetRequest):
     address = Web3.toChecksumAddress(request.address)
-    if(address in cooldowns and (cooldowns[address] + cooldown_period) > time.time()):
-        raise HTTPException(status_code=400, detail="fucking time out boye")
+    if(address in cooldowns and (cooldowns[address] + COOLDOWN_PERIOD) > time.time()):
+        raise HTTPException(status_code=425, detail='OY OY slow down boYE')
 
 
     amt = Web3.toWei(request.amt, 'ether')
