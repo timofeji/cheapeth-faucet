@@ -2,7 +2,7 @@
 
 .App {
   text-align: center;
-  background-color: #282c34;
+  background-color: #121721;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,6 +26,10 @@
 }
 
 input {
+  border-style: solid ;
+  border-color: #bc0000;
+  border-width: 2px;
+  border-radius: 5px;
   width: 300px;
   padding: 12px 20px;
   margin: 8px 0;
@@ -33,6 +37,7 @@ input {
 }
 
 button {
+
   background-color: #bc0000;
   border: none;
   color: white;
@@ -40,6 +45,8 @@ button {
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
+  font-size: 20px;
+  font-family: "DK Cool Crayon";
 }
 
 button:visited{
@@ -48,7 +55,7 @@ button:visited{
 
 .credit {
   position: fixed;
-  bottom:15px;
+  top:15px;
 }
 a {
   color: #bc0000;
@@ -56,6 +63,7 @@ a {
 a:hover {
   color: #df5858;
 }
+
 button:hover{
   background-color: #df5858;
 }

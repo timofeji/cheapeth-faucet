@@ -16,35 +16,32 @@ class App extends React.Component {
       method: "POST",
       body: JSON.stringify(this.state),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error(response.statusText);
-        else return response.json();
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(await response.text());
+        } else return response.json();
       })
       .then((data) => {
-        console.log(data);
         toast.success(data.message, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
-          pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
       })
       .catch((error) => {
-        console.log('error: ' + error);
-        toast.error('error' + error, {
+        console.log();
+        toast.error("Error: " + JSON.parse(error.message).detail, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
-          pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
-        this.setState({ requestFailed: true });
-      });;
+      });
     event.preventDefault();
   };
 
