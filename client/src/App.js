@@ -74,6 +74,7 @@ class App extends React.Component {
           onChange={this.handleChange}
         ></input>
         <button onClick={this.handleSubmit}>Request Funds</button>
+        <button onClick={this.handleDonate}>Donate Funds to Faucet</button>
 
         <i className="credit">
           A <a href="https://github.com/timofeji">@timofeji</a> project
