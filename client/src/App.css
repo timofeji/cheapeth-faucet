@@ -1,88 +1,99 @@
 @import url(//db.onlinewebfonts.com/c/2858f88cb71b6ac1122a944e220d9940?family=DK+Cool+Crayon);
 
-.App {
-  text-align: center;
-  background-color: #121721;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  font-family: "DK Cool Crayon";
+* {
+	font-family: monospace;
 }
 
+.App {
+	text-align: center;
+	background-color: #121721;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
+	font-family: 'DK Cool Crayon';
+	background-image: radial-gradient(
+		circle,
+		#472525,
+		#371d1f,
+		#261619,
+		#180e10,
+		#000000
+	);
+}
 
 .logo {
-  pointer-events: none;
+	pointer-events: none;
 }
 .logo img {
-  position: relative;
-  object-fit: scale-down;
-  /* position: relative; */
-  max-height: 200px;
-  animation: MoveUpDown 1s linear infinite;
+	position: relative;
+	object-fit: scale-down;
+	/* position: relative; */
+	max-height: 200px;
+	animation: MoveUpDown 1s linear infinite;
 }
 
 input {
-  border-style: solid ;
-  border-color: #bc0000;
-  border-width: 2px;
-  border-radius: 5px;
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
+	border-style: solid;
+	border-color: #bc0000;
+	border-width: 2px;
+	border-radius: 5px;
+	width: 300px;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
 }
 
 button {
-
-  background-color: #bc0000;
-  border: none;
-  color: white;
-  padding: 16px 32px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
-  font-size: 20px;
-  font-family: "DK Cool Crayon";
+	background-color: #bc0000;
+	border: none;
+	color: white;
+	padding: 16px 32px;
+	text-decoration: none;
+	margin: 4px 2px;
+	cursor: pointer;
+	font-size: 20px;
+	font-family: 'DK Cool Crayon';
 }
 
-button:visited{
-  background-color: #300000;
+button:visited {
+	background-color: #300000;
 }
 
 .credit {
-  position: fixed;
-  top:15px;
+	position: fixed;
+	top: 15px;
 }
 a {
-  color: #bc0000;
+	color: #bc0000;
 }
 a:hover {
-  color: #df5858;
+	color: #df5858;
 }
 
-button:hover{
-  background-color: #df5858;
+button:hover {
+	background-color: #df5858;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .logo {
-    animation: MoveUpDown 1s linear infinite;
-  }
+	.logo {
+		animation: MoveUpDown 1s linear infinite;
+	}
 }
 
 .App-link {
-  color: #61dafb;
+	color: #61dafb;
 }
 
 @keyframes MoveUpDown {
-  0%, 100% {
-    bottom: 0;
-  }
-  50% {
-    bottom: 10px;
-  }
+	0%,
+	100% {
+		bottom: 0;
+	}
+	50% {
+		bottom: 10px;
+	}
 }
