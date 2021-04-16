@@ -14,11 +14,7 @@ from json.decoder import JSONDecodeError
 
 #I can do this cuz cheapeth cheap jk lol
 DEPLOYER_PRIVATE_KEY = os.environ.get('DEPLOYER_PRIVATE_KEY')
-
 DEPLOYER_ADDRESS = os.environ.get('DEPLOYER_ADDRESS')
-
-print(DEPLOYER_PRIVATE_KEY)
-print(DEPLOYER_ADDRESS)
 
 FAUCET_CONTRACT_ADDRESS = '0xc2d39907accfc3951e915b30a8f5d03a35b29071'
 COOLDOWN_PERIOD = 864000  # 10 days
