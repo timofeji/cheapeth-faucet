@@ -1,9 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from web3 import Web3, HTTPProvider
-from solcx import compile_files, install_solc
+from solcx import compile_files
 
 import time
 import os
@@ -11,21 +11,21 @@ import atexit
 import json
 from json.decoder import JSONDecodeError
 
-install_solc()
 
 #I can do this cuz cheapeth cheap jk lol
 DEPLOYER_PRIVATE_KEY = os.environ.get('DEPLOYER_PRIVATE_KEY')
 
-'ff874a4b92ce9b8ceaad5699eb720e81c6282d8aecae80787a5f7849f2025df6'
 DEPLOYER_ADDRESS = os.environ.get('DEPLOYER_ADDRESS')
 
-'0xCC1538bddD9e28376a7F83e7a2896B544D7C145f'
+print(DEPLOYER_PRIVATE_KEY)
+print(DEPLOYER_ADDRESS)
 
-FAUCET_CONTRACT_ADDRESS = '0x4a2a7432bb23471a8c9de51271bacc2f5f728b13'
+FAUCET_CONTRACT_ADDRESS = '0xc2d39907accfc3951e915b30a8f5d03a35b29071'
 COOLDOWN_PERIOD = 864000  # 10 days
 COOLDOWN_FILENAME = 'cooldowns.json'
 
 cooldowns = {}
+cooldowns_ip = {}
 if(os.path.exists(COOLDOWN_FILENAME)):
     with open(COOLDOWN_FILENAME) as f:
         try:
@@ -48,8 +48,8 @@ test_acc = Web3.toChecksumAddress(DEPLOYER_ADDRESS)
 w3 = Web3(Web3.HTTPProvider('https://node.cheapeth.org/rpc'))
 w3.eth.default_account = test_acc
 
-# compiled_sol = compile_files(['./faucet.sol'])
-# faucet_compiled = compiled_sol['./faucet.sol:faucet']
+compiled_sol = compile_files(['../contracts/faucet.sol'])
+faucet_compiled = compiled_sol['../contracts/faucet.sol:faucet']
 
 faucet_address = Web3.toChecksumAddress(FAUCET_CONTRACT_ADDRESS)
 faucet = w3.eth.contract(faucet_address, abi=faucet_compiled['abi'])
@@ -58,18 +58,13 @@ class FaucetRequest(BaseModel):
     address: str
     amt: float
 
-
-# class ApprovalRequest(BaseModel):
-#     address: str
-#     reactions: int
-
-
-
 app = FastAPI()
 
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "http://www.faucet.cheap",
+    "http://faucet.cheap"
 ]
 
 
@@ -82,19 +77,26 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/api/test")
 def root():
     return {"message": "You have reached... uhh.. the cheapeth faucet api"}
 
 
-@app.post("/request")
-def read_user(request: FaucetRequest):
-    address = Web3.toChecksumAddress(request.address)
-    # if(address in cooldowns and (cooldowns[address] + COOLDOWN_PERIOD) > time.time()):
-        # raise HTTPException(status_code=425, detail='OY OY slow down boYE')
+@app.post("/api/request")
+def read_user(request: FaucetRequest, req: Request):
+    client_host = req.client.host
+    
+    if(client_host in cooldowns_ip and (cooldowns_ip[client_host] + COOLDOWN_PERIOD) > time.time()):
+        raise HTTPException(status_code=425, detail='OY OY slow down boYE')
 
     amt = Web3.toWei(request.amt, 'ether')
+    if(amt > Web3.toWei(1, 'ether')):
+        raise HTTPException(status_code=425, detail='Faucet broke pls only requests under 1cth')
 
+
+    address = Web3.toChecksumAddress(request.address)
+    if(address in cooldowns and (cooldowns[address] + COOLDOWN_PERIOD) > time.time()):
+        raise HTTPException(status_code=425, detail='OY OY slow down boYE')
 
     nonce = w3.eth.getTransactionCount(test_acc)  
     tx_hash = faucet.functions.sendFunds(address, amt).buildTransaction({'chainId': 777,'gas': 300000,'gasPrice': w3.toWei('1', 'gwei'),'nonce': nonce,})
@@ -105,8 +107,6 @@ def read_user(request: FaucetRequest):
     w3.eth.sendRawTransaction(signed_txn.rawTransaction)
 
     cooldowns[address] = time.time()
+    cooldowns_ip[client_host] = time.time()
     return {"message": "YOU GOT IT CHIEF 🍆"}
 
-
-# @app.post("/approval")
-# def approve_user(request: ApprovalRequest)
